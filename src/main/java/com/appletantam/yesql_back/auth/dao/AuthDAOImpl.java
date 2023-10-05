@@ -13,6 +13,6 @@ public class AuthDAOImpl implements AuthDAO {
 
     @Override
     public void adduser(UserDTO userDTO) {
-        //sqlSession.insert("auth.insertUser", userDTO);
+        sqlSession.insert("auth.insertUser", userDTO);
     }
 }
