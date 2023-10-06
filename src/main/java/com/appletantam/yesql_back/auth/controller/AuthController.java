@@ -40,7 +40,6 @@ public class AuthController {
         u.setUserPassword(userDTO.getUserPassword());
 
         System.out.println(u);
-
         return userDTO;
     }
 
