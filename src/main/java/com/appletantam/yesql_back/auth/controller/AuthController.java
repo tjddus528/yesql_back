@@ -35,7 +35,6 @@ public class AuthController {
         authService.addUser(userDTO);
 
         UserDTO u = new UserDTO();
-
         u.setUserCd(userDTO.getUserCd());
         u.setUserId(userDTO.getUserId());
         u.setUserPassword(userDTO.getUserPassword());
