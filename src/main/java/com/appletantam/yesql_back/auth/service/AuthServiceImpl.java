@@ -15,4 +15,10 @@ public class AuthServiceImpl implements AuthService {
     public void addUser(UserDTO userDTO) {
         authDAO.adduser(userDTO);
     }
+
+    @Override
+    public String checkDuplicatedId(String userId) {
+        if ( authDAO.checkDuplicatedId(userId) == null ) return "notDuplicate";
+        else return "duplicate";
+    }
 }

@@ -15,4 +15,9 @@ public class AuthDAOImpl implements AuthDAO {
     public void adduser(UserDTO userDTO) {
         sqlSession.insert("auth.insertUser", userDTO);
     }
+
+    @Override
+    public String checkDuplicatedId(String userId) {
+        return sqlSession.selectOne("auth.selectDuplicatedId", userId);
+    }
 }

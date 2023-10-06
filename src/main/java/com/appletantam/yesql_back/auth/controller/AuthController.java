@@ -3,10 +3,7 @@ package com.appletantam.yesql_back.auth.controller;
 import com.appletantam.yesql_back.auth.dto.UserDTO;
 import com.appletantam.yesql_back.auth.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class AuthController {
@@ -31,6 +28,7 @@ public class AuthController {
      *  - String to Date 데이터 형식의 바인딩은 DTO클래스 property위에 @DateTimeFormat(pattern = "yyyy-MM-dd")을 추가하여 매핑한다.
      */
 
+    //회원가입
     @PostMapping("/register")
     public UserDTO register(@ModelAttribute UserDTO userDTO){
 
@@ -46,6 +44,13 @@ public class AuthController {
 
         return userDTO;
     }
+
+    //중복아이디 검사
+    @PostMapping("/checkDuplicatedId")
+    public String checkDuplicatedId(@RequestParam("userId") String userId){
+        return authService.checkDuplicatedId(userId);
+    }
+
 
 
 }

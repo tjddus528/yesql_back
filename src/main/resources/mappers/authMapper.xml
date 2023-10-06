@@ -6,9 +6,18 @@
         INSERT INTO
                 USER
         VALUES (
+                #{userCd},
                 #{userId},
-                #{userPassword},
-                #{userCd}
+                #{userPassword}
                )
     </insert>
+
+    <select id="selectDuplicatedId" parameterType="String" resultType="String">
+        SELECT
+                USER_ID
+        FROM
+                USER
+        WHERE
+                USER_ID = #{userId}
+    </select>
 </mapper>
