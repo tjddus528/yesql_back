@@ -8,8 +8,6 @@ import org.springframework.stereotype.Component;
 @Setter
 @Component
 public class AttrDataDTO {
-
     private long attrCd;
-    private long dataCd;
     private String dataInfo;
 }

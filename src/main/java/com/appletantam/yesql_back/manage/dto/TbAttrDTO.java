@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
 @Setter
 @Component
 public class TbAttrDTO {
-    private String attrName;
     private long attrCd;
-    private String attrType;
     private long tableCd;
+    private String attrType;
+    private String attrName;
 }

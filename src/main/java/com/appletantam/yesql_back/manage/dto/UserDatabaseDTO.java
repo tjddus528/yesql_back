@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Setter
 @Component
 public class UserDatabaseDTO {
-    private String dbName;
     private long dbCd;
     private long userCd;
+    private String dbName;
 }
