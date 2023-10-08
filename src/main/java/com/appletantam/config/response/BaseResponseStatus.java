@@ -16,8 +16,7 @@ public enum BaseResponseStatus {
      */
 
     /**
-     * 1. 필수 입력값이 없을 때 (2000~)
-     * EMPTY_목적어
+     * 1. 입력값에 오류가 있을 때 (2000~)
      */
     // 계정관련(2000~)
     REQUEST_ERROR(false, 2000, "입력값을 확인해주세요."),

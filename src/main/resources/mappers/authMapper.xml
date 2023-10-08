@@ -2,11 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="auth">
-    <insert id="insertUser" parameterType="UserDTO">
+    <insert id="insertUser" parameterType="UserDTO"  useGeneratedKeys="true" keyProperty="userCd">
         INSERT INTO
-                USER
+                USER (
+                    USER_ID,
+                    USER_PASSWORD
+                    )
         VALUES (
-                #{userCd},
                 #{userId},
                 #{userPassword}
                )
