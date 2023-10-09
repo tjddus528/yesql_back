@@ -7,4 +7,8 @@ public interface AuthService {
     public UserDTO addUser(UserDTO userDTO) throws BaseException;
 
     public String checkDuplicatedId(String userId);
+
+    public boolean login(UserDTO userDTO);
+
+    public void createDB(String dbName, String userId);
 }
