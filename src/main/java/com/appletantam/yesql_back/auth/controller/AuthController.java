@@ -1,11 +1,16 @@
 package com.appletantam.yesql_back.auth.controller;
 
+import com.appletantam.config.response.BaseException;
+import com.appletantam.config.response.BaseResponse;
 import com.appletantam.yesql_back.auth.dto.UserDTO;
 import com.appletantam.yesql_back.auth.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import static com.appletantam.config.response.BaseResponseStatus.REQUEST_ERROR;
+
 @RestController
+@RequestMapping("/auth")
 public class AuthController {
 
     @Autowired
@@ -30,17 +35,20 @@ public class AuthController {
 
     //회원가입
     @PostMapping("/register")
-    public UserDTO register(@ModelAttribute UserDTO userDTO){
+    public BaseResponse<UserDTO> register(@RequestBody UserDTO userDTO) {
 
-        authService.addUser(userDTO);
+        // 입력값 검사
+        if(userDTO.getUserId() == null || userDTO.getUserPassword() == null) {
+            return new BaseResponse<>(REQUEST_ERROR);
+        }
 
-        UserDTO u = new UserDTO();
-        u.setUserCd(userDTO.getUserCd());
-        u.setUserId(userDTO.getUserId());
-        u.setUserPassword(userDTO.getUserPassword());
+        try{
+            UserDTO newUser = authService.addUser(userDTO);
+            return new BaseResponse<>(newUser);
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
 
-        System.out.println(u);
-        return userDTO;
     }
 
     //중복아이디 검사
