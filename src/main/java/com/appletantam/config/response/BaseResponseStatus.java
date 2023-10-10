@@ -9,7 +9,7 @@ public enum BaseResponseStatus {
      * 1000 :요청 성공
      */
     SUCCESS(true, 1000, "요청에 성공하였습니다."),
-
+    LOGIN_INCORRECT(false, 2003,"아이디 혹은 비밀번호를 다시 확인해주세요"),
 
     /**
      * 2000 : Request오류

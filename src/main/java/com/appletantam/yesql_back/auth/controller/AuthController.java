@@ -4,17 +4,15 @@ import com.appletantam.config.response.BaseException;
 import com.appletantam.config.response.BaseResponse;
 import com.appletantam.yesql_back.auth.dto.UserDTO;
 import com.appletantam.yesql_back.auth.service.AuthService;
-import com.appletantam.yesql_back.manage.dto.UserDatabaseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
-import static com.appletantam.config.response.BaseResponseStatus.REQUEST_ERROR;
 
 @RestController
 @RequestMapping("/auth")
@@ -22,6 +20,8 @@ public class AuthController {
 
     @Autowired
     private AuthService authService;
+    private UserDTO userDTO;
+    private Model model;
 
     @GetMapping("/test")
     public String signUp() {
@@ -42,27 +42,18 @@ public class AuthController {
 
     //회원가입
     @PostMapping("/register")
-    public BaseResponse<UserDTO> register(@ModelAttribute UserDTO userDTO) {
+    public String register (UserDTO userDTO, Model model) {
+        UserDTO newUser = authService.addUser(userDTO);
+        model.addAttribute("message", "회원가입 완료");
+        model.addAttribute("userId", userDTO.getUserId());
 
-        /*
-        // 입력값 검사 -> 이 입력값 검사는 제이쿼리로 프론트에서 submit하기 전에 실시에서 controller로 안넘어오게 할 예정
-        if(userDTO.getUserId() == null || userDTO.getUserPassword() == null) {
-            return new BaseResponse<>(REQUEST_ERROR);
-        }
-
-        try{
-            UserDTO newUser = authService.addUser(userDTO);
-            return new BaseResponse<>(newUser);
-        } catch (BaseException e) {
-            return new BaseResponse<>(e.getStatus());
-        }*/
-
-        return null;
+        return "newUser";
     }
 
     @PostMapping("/register2")
-    public UserDTO register2 (UserDTO userDTO) throws BaseException {
-        return authService.addUser(userDTO);
+    public BaseResponse<UserDTO> register2(@ModelAttribute UserDTO userDTO) {
+        UserDTO newUser = authService.addUser(userDTO);
+        return new BaseResponse<>(newUser);
     }
 
     //중복아이디 검사
@@ -72,42 +63,17 @@ public class AuthController {
     }
 
     //로그인
-    @PostMapping("/login")
-    public ResponseEntity<Object> login(HttpServletRequest request, @ModelAttribute UserDTO userDTO){
-
-        String jsScript = "";
-
-        //로그인 성공한 경우
-        if ( authService.login(userDTO) ){
-            // 세션에 로그인 정보 (유저아이디) 박아두기
-            HttpSession session = request.getSession();
-            session.setAttribute("userId", userDTO.getUserId());
-
-            // 로그인 성공 팝업창 생성
-            jsScript += "<script>";
-            jsScript += "alert('login success!');";
-            jsScript += "location.href='" + request.getContextPath() + "/LandingPage';";
-            jsScript += "</script>";
-
+    @PostMapping("login")
+    public BaseResponse<String> login (@ModelAttribute UserDTO userDTO){
+        String userId = userDTO.getUserId();
+        if (authService.login(userDTO)){
+            return new BaseResponse<>(userId);
         }
-        // 로그인 실패한 경우
-        else {
-
-            // 로그인 실패 팝업창 생성
-            jsScript += "<script>";
-            jsScript += "alert('ID or password is incorrect :(');";
-            jsScript += "location.href='" + request.getContextPath() + "/LoginPage';";
-            jsScript += "</script>";
-
+        else{
+            return null;
+            //return new BaseResponse<>(2003);
         }
-
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "text/html; charset=utf-8");
-
-        return new ResponseEntity<Object>(jsScript, responseHeaders, HttpStatus.OK);
-
     }
-
 
     //로그아웃
     @GetMapping("/logout")

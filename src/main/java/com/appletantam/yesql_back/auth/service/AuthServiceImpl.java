@@ -21,15 +21,8 @@ public class AuthServiceImpl implements AuthService {
     private AuthDAO authDAO;
 
     @Override
-    public UserDTO addUser(UserDTO userDTO) throws BaseException {
-
-        // 중복 여부 검사
-        if(checkDuplicatedId(userDTO.getUserId()).equals("duplicate")){
-            throw new BaseException(EXISTS_ID);
-        }
-
+    public UserDTO addUser(UserDTO userDTO){
         return authDAO.adduser(userDTO);
-
     }
 
     @Override
