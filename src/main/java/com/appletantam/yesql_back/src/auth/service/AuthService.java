@@ -1,7 +1,6 @@
-package com.appletantam.yesql_back.auth.service;
+package com.appletantam.yesql_back.src.auth.service;
 
-import com.appletantam.config.response.BaseException;
-import com.appletantam.yesql_back.auth.dto.UserDTO;
+import com.appletantam.yesql_back.src.auth.dto.UserDTO;
 
 public interface AuthService {
     public UserDTO addUser(UserDTO userDTO);

@@ -1,6 +1,6 @@
-package com.appletantam.yesql_back.auth.dao;
+package com.appletantam.yesql_back.src.auth.dao;
 
-import com.appletantam.yesql_back.auth.dto.UserDTO;
+import com.appletantam.yesql_back.src.auth.dto.UserDTO;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;

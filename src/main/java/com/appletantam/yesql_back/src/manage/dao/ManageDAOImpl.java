@@ -1,4 +1,4 @@
-package com.appletantam.yesql_back.manage.dao;
+package com.appletantam.yesql_back.src.manage.dao;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;

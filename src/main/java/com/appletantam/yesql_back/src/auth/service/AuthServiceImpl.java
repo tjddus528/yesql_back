@@ -1,18 +1,12 @@
-package com.appletantam.yesql_back.auth.service;
+package com.appletantam.yesql_back.src.auth.service;
 
-import com.appletantam.config.response.BaseException;
-import com.appletantam.config.response.BaseResponse;
-import com.appletantam.yesql_back.auth.dao.AuthDAO;
-import com.appletantam.yesql_back.auth.dto.UserDTO;
+import com.appletantam.yesql_back.src.auth.dao.AuthDAO;
+import com.appletantam.yesql_back.src.auth.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Struct;
 import java.util.HashMap;
 import java.util.Map;
-
-import static com.appletantam.config.response.BaseResponseStatus.DATABASE_ERROR;
-import static com.appletantam.config.response.BaseResponseStatus.EXISTS_ID;
 
 @Service
 public class AuthServiceImpl implements AuthService {

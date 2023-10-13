@@ -1,9 +1,8 @@
-package com.appletantam.yesql_back.auth.controller;
+package com.appletantam.yesql_back.src.auth.controller;
 
-import com.appletantam.config.response.BaseException;
-import com.appletantam.config.response.BaseResponse;
-import com.appletantam.yesql_back.auth.dto.UserDTO;
-import com.appletantam.yesql_back.auth.service.AuthService;
+import com.appletantam.yesql_back.config.response.BaseResponse;
+import com.appletantam.yesql_back.src.auth.dto.UserDTO;
+import com.appletantam.yesql_back.src.auth.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

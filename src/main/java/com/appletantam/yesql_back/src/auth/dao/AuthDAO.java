@@ -1,6 +1,6 @@
-package com.appletantam.yesql_back.auth.dao;
+package com.appletantam.yesql_back.src.auth.dao;
 
-import com.appletantam.yesql_back.auth.dto.UserDTO;
+import com.appletantam.yesql_back.src.auth.dto.UserDTO;
 
 import java.util.Map;
 

@@ -1,4 +1,4 @@
-package com.appletantam.yesql_back.auth.dto;
+package com.appletantam.yesql_back.src.auth.dto;
 
 import lombok.Getter;
 import lombok.Setter;
