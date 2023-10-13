@@ -1,12 +1,11 @@
 package com.appletantam.yesql_back.auth.dao;
 
-import com.appletantam.config.response.BaseException;
 import com.appletantam.yesql_back.auth.dto.UserDTO;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import static com.appletantam.config.response.BaseResponseStatus.DATABASE_ERROR;
+import java.util.Map;
 
 @Repository
 public class AuthDAOImpl implements AuthDAO {
@@ -24,4 +23,15 @@ public class AuthDAOImpl implements AuthDAO {
     public String checkDuplicatedId(String userId) {
         return sqlSession.selectOne("auth.selectDuplicatedId", userId);
     }
+
+    @Override
+    public UserDTO selectLogin(UserDTO userDTO) {
+        return sqlSession.selectOne("auth.selectLogin", userDTO);
+    }
+
+    @Override
+    public String selectCd(String userId) { return sqlSession.selectOne("auth.selectCd", userId); }
+
+    @Override
+    public void addUserDatabase(Map<String, String> map) { sqlSession.insert("auth.insertUserDatabase", map); }
 }

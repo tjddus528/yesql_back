@@ -2,16 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="auth">
-    <insert id="insertUser" parameterType="UserDTO"  useGeneratedKeys="true" keyProperty="userCd">
-        INSERT INTO
-                USER (
+    <insert id="insertUser" parameterType="UserDTO" useGeneratedKeys="true" keyProperty="userCd" >
+        INSERT INTO USER (
                     USER_ID,
                     USER_PASSWORD
-                    )
+        )
         VALUES (
                 #{userId},
                 #{userPassword}
-               )
+        )
     </insert>
 
     <select id="selectDuplicatedId" parameterType="String" resultType="String">
@@ -22,4 +21,34 @@
         WHERE
                 USER_ID = #{userId}
     </select>
+
+    <select id="selectLogin" parameterType="String" resultType="UserDTO">
+        SELECT
+                *
+        FROM
+                USER
+        WHERE
+                USER_ID = #{userId}
+
+    </select>
+
+    <select id="selectCd" parameterType="String" resultType="String">
+        SELECT
+                USER_CD
+        from
+                USER
+        WHERE
+                USER_ID = #{userId}
+    </select>
+
+    <insert id="insertUserDatabase" parameterType="hashmap" useGeneratedKeys="true" keyProperty="dbCd">
+        INSERT INTO USERDATABASE (
+                    USER_CD,
+                    DB_NAME
+        )
+        VALUES (
+                    #{userCd},
+                    #{dbName}
+        )
+    </insert>
 </mapper>
