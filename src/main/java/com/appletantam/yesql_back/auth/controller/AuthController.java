@@ -67,7 +67,7 @@ public class AuthController {
     }
 
     //로그인
-    @PostMapping("login")
+    @PostMapping("/login")
     public BaseResponse<Map> login (@ModelAttribute UserDTO userDTO){
         String userId = userDTO.getUserId();
 
@@ -84,7 +84,7 @@ public class AuthController {
     }
 
     //유저 데이터베이스 찾기
-    @GetMapping("findDatabase")
+    @GetMapping("/findDB")
     public BaseResponse<UserDatabaseDTO> findDatabase(String userId){
 
         UserDatabaseDTO userDatabaseDTO = authService.findDatabase(userId);
