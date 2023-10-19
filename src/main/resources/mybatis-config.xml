@@ -8,6 +8,6 @@
 
     <typeAliases>
         <typeAlias type="com.appletantam.yesql_back.auth.dto.UserDTO" 		        alias="UserDTO"/>
-        <typeAlias type="com.appletantam.yesql_back.manage.dto.AttrDataDTO" 		alias="AttrDataDTO"/>
+        <typeAlias type="com.appletantam.yesql_back.manage.dto.UserDatabaseDTO" 		alias="UserDatabaseDTO"/>
     </typeAliases>
 </configuration>

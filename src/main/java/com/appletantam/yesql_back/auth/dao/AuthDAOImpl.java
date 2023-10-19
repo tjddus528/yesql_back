@@ -1,6 +1,7 @@
-package com.appletantam.yesql_back.src.auth.dao;
+package com.appletantam.yesql_back.auth.dao;
 
-import com.appletantam.yesql_back.src.auth.dto.UserDTO;
+import com.appletantam.yesql_back.auth.dto.UserDTO;
+import com.appletantam.yesql_back.manage.dto.UserDatabaseDTO;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -34,4 +35,9 @@ public class AuthDAOImpl implements AuthDAO {
 
     @Override
     public void addUserDatabase(Map<String, String> map) { sqlSession.insert("auth.insertUserDatabase", map); }
+
+    @Override
+    public UserDatabaseDTO findDatabase(String userId) {
+        return sqlSession.selectOne("auth.selectDB", userId);
+    }
 }

@@ -1,6 +1,7 @@
-package com.appletantam.yesql_back.src.auth.dao;
+package com.appletantam.yesql_back.auth.dao;
 
-import com.appletantam.yesql_back.src.auth.dto.UserDTO;
+import com.appletantam.yesql_back.auth.dto.UserDTO;
+import com.appletantam.yesql_back.manage.dto.UserDatabaseDTO;
 
 import java.util.Map;
 
@@ -14,4 +15,6 @@ public interface AuthDAO {
     public String selectCd(String userId);
 
     public void addUserDatabase(Map<String, String> map);
+
+    public UserDatabaseDTO findDatabase(String userId);
 }
