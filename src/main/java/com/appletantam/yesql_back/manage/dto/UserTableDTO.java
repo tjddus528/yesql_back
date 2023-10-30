@@ -1,4 +1,4 @@
-package com.appletantam.yesql_back.src.manage.dto;
+package com.appletantam.yesql_back.manage.dto;
 
 import lombok.Getter;
 import lombok.Setter;

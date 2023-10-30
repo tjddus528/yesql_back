@@ -1,7 +1,8 @@
-package com.appletantam.yesql_back.src.auth.service;
+package com.appletantam.yesql_back.auth.service;
 
-import com.appletantam.yesql_back.src.auth.dao.AuthDAO;
-import com.appletantam.yesql_back.src.auth.dto.UserDTO;
+import com.appletantam.yesql_back.auth.dao.AuthDAO;
+import com.appletantam.yesql_back.auth.dto.UserDTO;
+import com.appletantam.yesql_back.manage.dto.UserDatabaseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -52,6 +53,11 @@ public class AuthServiceImpl implements AuthService {
 
             authDAO.addUserDatabase(map); // 유저의 코드에 맞는 데이터베이스 생성해주기
         }
+    }
+
+    @Override
+    public UserDatabaseDTO findDatabase(String userId) {
+        return authDAO.findDatabase(userId);
     }
 
 }

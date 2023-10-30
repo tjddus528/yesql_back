@@ -35,7 +35,7 @@
     <select id="selectCd" parameterType="String" resultType="String">
         SELECT
                 USER_CD
-        from
+        FROM
                 USER
         WHERE
                 USER_ID = #{userId}
@@ -51,4 +51,14 @@
                     #{dbName}
         )
     </insert>
+
+    <select id="findDB" parameterType="String" resultType="UserDatabaseDTO">
+        SELECT
+            DB_NAME
+        FROM
+            USER U
+        INNER JOIN USERDATABASE UD
+                ON U.USER_CD = UD.USER_CD
+        WHERE USER_ID = #{userId}
+    </select>
 </mapper>
