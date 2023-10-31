@@ -52,13 +52,16 @@
         )
     </insert>
 
-    <select id="findDB" parameterType="String" resultType="UserDatabaseDTO">
+    <select id="selectDB" parameterType="String" resultType="UserDatabaseDTO">
         SELECT
-            DB_NAME
+            UD.USER_CD,
+            UD.DB_CD,
+            UD.DB_NAME
         FROM
             USER U
         INNER JOIN USERDATABASE UD
                 ON U.USER_CD = UD.USER_CD
         WHERE USER_ID = #{userId}
     </select>
+
 </mapper>

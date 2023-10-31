@@ -36,6 +36,7 @@ public class AuthDAOImpl implements AuthDAO {
     @Override
     public void addUserDatabase(Map<String, String> map) { sqlSession.insert("auth.insertUserDatabase", map); }
 
+    // userId를 통해 userCd의 데베를 가져오기
     @Override
     public UserDatabaseDTO findDatabase(String userId) {
         return sqlSession.selectOne("auth.selectDB", userId);

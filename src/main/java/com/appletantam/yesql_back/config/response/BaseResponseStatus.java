@@ -11,8 +11,8 @@ public enum BaseResponseStatus {
     SUCCESS(true, 1000, "요청에 성공하였습니다."),
     REGISTER_SUCCESS(true, 1001, "register success"),
     LOGIN_SUCCESS(true, 1002, "login success"),
-    FIND_DATABASE(true, 1004, "유저 데이터베이스 존재함"),
-
+    FIND_DATABASE(true, 1004, "유저 데이터베이스가 존재합니다. main창으로 이동해주세요."),
+    CHANGED_DATABASE(true, 1005, "유저 데이터베이스의 이름을 성공적으로 변경했습니다"),
 
     /**
      * 1. 입력값에 오류가 있을 때 (2000~)
