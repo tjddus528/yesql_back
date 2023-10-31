@@ -40,6 +40,7 @@ public class ManageController {
     /* SQL 쿼리문 입력에 대한 프론트, antlr, 백 순서를 어떻게 해야할까
     * 프론트 <-> 백 <-> antlr로 해야할지..
     * 프론트 -> antlr -> 백 -> 프론트로 해야할지
+    * -> 결론 : 백에서 먼저 받고, antlr를 외부 api 취급해서 사용하기
     * */
 
     @PostMapping("/submitQuery")

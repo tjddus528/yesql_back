@@ -21,9 +21,9 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public String checkDuplicatedId(String userId) {
-        if ( authDAO.checkDuplicatedId(userId) == null ) return "notDuplicate";
-        else return "duplicate";
+    public boolean checkDuplicatedId(String userId) {
+        if ( authDAO.checkDuplicatedId(userId) == null ) return true;
+        else return false;
     }
 
     @Override

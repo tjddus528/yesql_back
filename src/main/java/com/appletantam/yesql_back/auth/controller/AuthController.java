@@ -62,7 +62,7 @@ public class AuthController {
 
     //중복아이디 검사 (ajax)
     @PostMapping("/checkDuplicatedId")
-    public String checkDuplicatedId(@RequestParam("userId") String userId){
+    public boolean checkDuplicatedId(@RequestParam("userId") String userId){
         return authService.checkDuplicatedId(userId);
     }
 
