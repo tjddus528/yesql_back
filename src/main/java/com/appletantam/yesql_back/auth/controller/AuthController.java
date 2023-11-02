@@ -51,13 +51,16 @@ public class AuthController {
     * ajax를 통해 이용할 비동기 api는 단순 값 전달, 그 외는 BaseResponse 객체를 이용하는 것을 주축으로 둬야할듯
     */
 
-
-
     //회원가입
     @PostMapping("/register")
     public BaseResponse<UserDTO> register(@ModelAttribute UserDTO userDTO) {
         UserDTO newUser = authService.addUser(userDTO);
-        return new BaseResponse<>(BaseResponseStatus.REGISTER_SUCCESS, newUser);
+        if ( checkDuplicatedId(userDTO.getUserId()) ){
+            return new BaseResponse<>(BaseResponseStatus.REGISTER_SUCCESS, newUser);
+        }
+        else {
+            return new BaseResponse<>(BaseResponseStatus.REGISTER_FAILED);
+        }
     }
 
     //중복아이디 검사 (ajax)
