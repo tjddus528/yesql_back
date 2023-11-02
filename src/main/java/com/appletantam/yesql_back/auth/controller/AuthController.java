@@ -54,8 +54,9 @@ public class AuthController {
     //회원가입
     @PostMapping("/register")
     public BaseResponse<UserDTO> register(@ModelAttribute UserDTO userDTO) {
-        UserDTO newUser = authService.addUser(userDTO);
-        if ( checkDuplicatedId(userDTO.getUserId()) ){
+
+        if (checkDuplicatedId(userDTO.getUserId())){
+            UserDTO newUser = authService.addUser(userDTO);
             return new BaseResponse<>(BaseResponseStatus.REGISTER_SUCCESS, newUser);
         }
         else {

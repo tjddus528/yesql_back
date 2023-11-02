@@ -2,6 +2,7 @@ package com.appletantam.yesql_back.auth.dao;
 
 import com.appletantam.yesql_back.auth.dto.UserDTO;
 import com.appletantam.yesql_back.manage.dto.UserDatabaseDTO;
+import org.apache.ibatis.exceptions.TooManyResultsException;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -21,7 +22,7 @@ public class AuthDAOImpl implements AuthDAO {
     }
 
     @Override
-    public String checkDuplicatedId(String userId) {
+    public String checkDuplicatedId(String userId) throws TooManyResultsException {
         return sqlSession.selectOne("auth.selectDuplicatedId", userId);
     }
 
