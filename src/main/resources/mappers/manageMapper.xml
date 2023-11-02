@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="manage">
+
+    <select id="selectDatbase" parameterType="long" resultType="UserDatabaseDTO">
+        SELECT
+            *
+        FROM
+            USERDATABASE
+        WHERE
+            DB_CD = #{dbCd}
+    </select>
+
+    <update id="updateDBname" parameterType="hashmap">
+        UPDATE
+            USERDATABASE
+        SET
+            DB_NAME = #{name}
+        WHERE
+            DB_CD = #{dbCd}
+
+    </update>
+
+    <select id="show">
+
+
+    </select>
+
+</mapper>

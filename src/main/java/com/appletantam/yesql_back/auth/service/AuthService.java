@@ -6,7 +6,7 @@ import com.appletantam.yesql_back.manage.dto.UserDatabaseDTO;
 public interface AuthService {
     public UserDTO addUser(UserDTO userDTO);
 
-    public String checkDuplicatedId(String userId);
+    public boolean checkDuplicatedId(String userId);
 
     public boolean login(UserDTO userDTO);
 

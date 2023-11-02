@@ -3,6 +3,7 @@ package com.appletantam.yesql_back.auth.service;
 import com.appletantam.yesql_back.auth.dao.AuthDAO;
 import com.appletantam.yesql_back.auth.dto.UserDTO;
 import com.appletantam.yesql_back.manage.dto.UserDatabaseDTO;
+import org.apache.ibatis.exceptions.TooManyResultsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,9 +22,13 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public String checkDuplicatedId(String userId) {
-        if ( authDAO.checkDuplicatedId(userId) == null ) return "notDuplicate";
-        else return "duplicate";
+    public boolean checkDuplicatedId(String userId) {
+        try {
+            if ( authDAO.checkDuplicatedId(userId) == null ) return true;      // 중복이 없을 때 true
+            return false;
+        } catch (TooManyResultsException exception) {
+            return false;                                                      // 중복된 값일 때 false
+        }
     }
 
     @Override
