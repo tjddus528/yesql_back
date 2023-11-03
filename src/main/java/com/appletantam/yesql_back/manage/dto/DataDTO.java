@@ -7,9 +7,14 @@ import org.springframework.stereotype.Component;
 @Getter
 @Setter
 @Component
-public class AttrDataDTO {
+public class DataDTO {
+    private long dbCd;
+    private long tableCd;
     private long attrCd;
     private long lowCd;
     private long dataCd;
+    private String tableName;
+    private String attrName;
+    private String attrType;
     private String dataInfo;
 }
