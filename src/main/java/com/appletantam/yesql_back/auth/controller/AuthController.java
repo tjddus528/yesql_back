@@ -24,7 +24,6 @@ public class AuthController {
 
     @Autowired
     private AuthService authService;
-    private UserDTO userDTO;
 
     @GetMapping("/test")
     public String signUp() {

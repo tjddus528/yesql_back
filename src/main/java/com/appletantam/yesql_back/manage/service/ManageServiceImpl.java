@@ -1,12 +1,14 @@
 package com.appletantam.yesql_back.manage.service;
 
 import com.appletantam.yesql_back.manage.dao.ManageDAO;
+import com.appletantam.yesql_back.manage.dto.DataDTO;
 import com.appletantam.yesql_back.manage.dto.UserDatabaseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
 
 @Service
 public class ManageServiceImpl implements ManageService{
@@ -20,5 +22,10 @@ public class ManageServiceImpl implements ManageService{
         map.put("name", name);
         map.put("dbCd", dbCd);
         return manageDAO.renameDB(map);
+    }
+
+    @Override
+    public List<DataDTO> getDataList(long dbCd) {
+        return manageDAO.selectDataList(dbCd);
     }
 }

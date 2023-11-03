@@ -12,5 +12,6 @@
         <typeAlias type="com.appletantam.yesql_back.manage.dto.UserTableDTO" 		    alias="UserTableDTO"/>
         <typeAlias type="com.appletantam.yesql_back.manage.dto.TbAttrDTO" 		        alias="TbAttrDTO"/>
         <typeAlias type="com.appletantam.yesql_back.manage.dto.AttrDataDTO" 		    alias="AttrDataDTO"/>
+        <typeAlias type="com.appletantam.yesql_back.manage.dto.DataDTO" 		        alias="DataDTO"/>
     </typeAliases>
 </configuration>

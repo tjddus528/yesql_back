@@ -22,8 +22,24 @@
 
     </update>
 
-    <select id="show">
-
+    <select id="selectDataList" parameterType="long" resultType="DataDTO">
+        SELECT
+            UT.DB_CD,
+            UT.TABLE_CD,
+            UT.TABLE_NAME,
+            TA.ATTR_CD,
+            TA.ATTR_TYPE,
+            TA.ATTR_NAME,
+            AD.LOW_CD,
+            AD.DATA_CD,
+            AD.DATA_INFO
+        FROM
+            USERTABLE UT
+        INNER JOIN TBATTR TA
+                ON UT.TABLE_CD = TA.TABLE_CD
+        INNER JOIN ATTRDATA AD
+                ON TA.ATTR_CD = AD.ATTR_CD
+        WHERE DB_CD = #{dbCd}
 
     </select>
 
