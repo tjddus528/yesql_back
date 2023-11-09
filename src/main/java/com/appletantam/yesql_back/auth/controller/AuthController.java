@@ -89,15 +89,15 @@ public class AuthController {
     //유저 데이터베이스 찾기
     @GetMapping("/findDB")
     public BaseResponse<UserDatabaseDTO> findDatabase(@RequestParam String userId){
-
         UserDatabaseDTO userDatabaseDTO = authService.findDatabase(userId);
-        if ( userDatabaseDTO.getDbName() != null ){ //유저의 데이터 베이스가 존재하는 경우
-            return new BaseResponse<>(BaseResponseStatus.FIND_DATABASE, userDatabaseDTO);
-        }
-        else { // 존재하지 않는 경우 null을 출력하고 프론트에서 welcome 창으로 이동해주기 ~
+
+        if ( userDatabaseDTO == null ) { //유저의 데이터 베이스가 존재하는 경우
             return new BaseResponse<>(BaseResponseStatus.NO_DATABASE);
         }
 
+        else {
+            return new BaseResponse<>(BaseResponseStatus.FIND_DATABASE, userDatabaseDTO);
+        }
     }
 
     //유저 데이터베이스 생성
