@@ -1,4 +1,4 @@
-package com.appletantam.yesql_back.config.antlr;
+package com.appletantam.yesql_back.sqlManager.service;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -9,14 +9,14 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 @Service
 public class AntlrService {
 
-    public ArrayList getData(String url) throws IOException {
+    public ArrayList getData(String url) {
+
         //Spring restTemplate
         HashMap<String, Object> result = new HashMap<String, Object>();
         ArrayList resultBody;

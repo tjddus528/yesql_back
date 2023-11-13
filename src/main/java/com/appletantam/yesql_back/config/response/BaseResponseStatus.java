@@ -22,6 +22,7 @@ public enum BaseResponseStatus {
     LOGIN_INCORRECT(false, 2001,"아이디 혹은 비밀번호를 다시 확인해주세요."),
     NO_DATABASE(true, 2002, "유저의 데이터베이스가 존재하지 않습니다. welcome으로 이동해 데이터베이스를 생성해주세요."),
     REGISTER_FAILED(false,2003, "회원가입 실패! 중복된 아이디입니다."),
+    ANTLR_API_ERROR(false, 2004, "ANTLR API 요청이 실패했습니다."),
     /**
      * 2. 이미 존재하는 리소스와 중복된 값일 때(2100~)
      * EXIST_목적어
@@ -55,7 +56,8 @@ public enum BaseResponseStatus {
      * 4000 : Database, Server오류
      */
     DATABASE_ERROR(false, 4000, "데이터베이스 연결에 실패하였습니다."),
-    SERVER_ERROR(false, 4001, "서버와의 연결에 실패하였습니다.");
+    SERVER_ERROR(false, 4001, "서버와의 연결에 실패하였습니다."),
+    EXECUTE_SQL_ERROR(false, 4002, "SQL 실행이 실패하였습니다.");
 
 
 
