@@ -5,11 +5,13 @@
     <insert id="insertUser" parameterType="UserDTO" useGeneratedKeys="true" keyProperty="userCd" >
         INSERT INTO USER (
                     USER_ID,
-                    USER_PASSWORD
+                    USER_PASSWORD,
+                    DB_NAME
         )
         VALUES (
                 #{userId},
-                #{userPassword}
+                #{userPassword},
+                #{userId}
         )
     </insert>
 
@@ -30,38 +32,6 @@
         WHERE
                 USER_ID = #{userId}
 
-    </select>
-
-    <select id="selectCd" parameterType="String" resultType="String">
-        SELECT
-                USER_CD
-        FROM
-                USER
-        WHERE
-                USER_ID = #{userId}
-    </select>
-
-    <insert id="insertUserDatabase" parameterType="hashmap" useGeneratedKeys="true" keyProperty="dbCd">
-        INSERT INTO USERDATABASE (
-                    USER_CD,
-                    DB_NAME
-        )
-        VALUES (
-                    #{userCd},
-                    #{dbName}
-        )
-    </insert>
-
-    <select id="selectDB" parameterType="String" resultType="UserDatabaseDTO">
-        SELECT
-            UD.USER_CD,
-            UD.DB_CD,
-            UD.DB_NAME
-        FROM
-            USER U
-        INNER JOIN USERDATABASE UD
-                ON U.USER_CD = UD.USER_CD
-        WHERE USER_ID = #{userId}
     </select>
 
 </mapper>

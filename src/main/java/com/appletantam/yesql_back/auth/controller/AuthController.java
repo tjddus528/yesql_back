@@ -4,17 +4,12 @@ import com.appletantam.yesql_back.config.response.BaseResponse;
 import com.appletantam.yesql_back.config.response.BaseResponseStatus;
 import com.appletantam.yesql_back.auth.dto.UserDTO;
 import com.appletantam.yesql_back.auth.service.AuthService;
-import com.appletantam.yesql_back.manage.dto.UserDatabaseDTO;
-import com.fasterxml.jackson.databind.ser.Serializers;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,9 +49,11 @@ public class AuthController {
     @PostMapping("/register")
     public BaseResponse<UserDTO> register(@ModelAttribute UserDTO userDTO) {
 
-        if (checkDuplicatedId(userDTO.getUserId())){
+        if (checkDuplicatedId(userDTO.getUserId())){ // 중복 확인 끝난 경우
+            // userId랑 dbName에 userId 값 넣어주기, userPassword에 비밀번호 넣어주기
             UserDTO newUser = authService.addUser(userDTO);
             return new BaseResponse<>(BaseResponseStatus.REGISTER_SUCCESS, newUser);
+            // 반환되는 값 : userId
         }
         else {
             return new BaseResponse<>(BaseResponseStatus.REGISTER_FAILED);
@@ -77,6 +74,7 @@ public class AuthController {
         Map<String, Object> map = new HashMap<>();
         map.put("userId", userId);
 
+        // 로그인 성공시 해당 userId를 세션에 넣어주기 ( userId, dbName 동일함 )
         if (authService.login(userDTO)){
             return new BaseResponse<>(BaseResponseStatus.LOGIN_SUCCESS, map);
         }
@@ -84,33 +82,6 @@ public class AuthController {
             return new BaseResponse<>(BaseResponseStatus.LOGIN_INCORRECT);
         }
 
-    }
-
-    //유저 데이터베이스 찾기
-    @GetMapping("/findDB")
-    public BaseResponse<UserDatabaseDTO> findDatabase(@RequestParam String userId){
-        UserDatabaseDTO userDatabaseDTO = authService.findDatabase(userId);
-
-        if ( userDatabaseDTO == null ) { //유저의 데이터 베이스가 존재하는 경우
-            return new BaseResponse<>(BaseResponseStatus.NO_DATABASE);
-        }
-
-        else {
-            return new BaseResponse<>(BaseResponseStatus.FIND_DATABASE, userDatabaseDTO);
-        }
-    }
-
-    //유저 데이터베이스 생성
-    @PostMapping("/createDB")
-    public BaseResponse<UserDatabaseDTO> createDB(@RequestParam("dbName") String dbName, @RequestParam("userId") String userId){
-        //유저가 로그인 되어있는 경우에만 등록이 가능하니까.. userId가 존재하는지 안하는지 확인할 필요 없음
-        //dbName이 다른 유저와 중복되도 상관없음 userCd로 분류하기 때문
-
-        // 유저 데이터베이스의 이름과, 유저 아이디를 통해 데이터베이스 만들기
-        authService.createDB(dbName, userId);
-
-        //dbCd를 세션에 박아둬야됨 -> 그에따른 데이터 정보를 main_scroll view에 보여줘야하기 때문
-        return findDatabase(userId);
     }
 
     //로그아웃
@@ -122,4 +93,39 @@ public class AuthController {
         session.invalidate();
 
     }
+
+    @GetMapping("/getData")
+    public void prac() throws SQLException {
+        String id = "appletantam";
+        String pw = "happycoding!!";
+        //Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/att?autoReconnect=true", id,pw);
+        Connection connection = DriverManager.getConnection("jdbc:mysql://yesql-test-db.cwcbrnwwwahx.ap-northeast-2.rds.amazonaws.com:3306", id,pw);
+        Statement stmt = connection.createStatement();
+
+        stmt.executeUpdate("USE yesql_test_db");
+        stmt.executeUpdate("CREATE DATABASE d1");
+        stmt.executeUpdate("CREATE TABLE user1_t1 (loan_number VARCHAR(10), branch_name VARCHAR(10), amount VARCHAR(10))");
+
+//        ResultSet rs = stmt.executeQuery("EXPLAIN USER");
+//        rs.next();
+//        String field = rs.getString("Field");
+//        String type = rs.getString("Type");
+//        String n = rs.getString("Null");
+//        String key = rs.getString("Key");
+//        System.out.println(field + "\t" + type + "\t" + n + "\t" + key);
+
+
+
+        ResultSet rs = stmt.executeQuery("SELECT * FROM USER WHERE USER_CD='1'");
+        while(rs.next()){
+            String userCd = rs.getString("USER_CD");
+            String userId = rs.getString("USER_ID");
+            String userPassword = rs.getString("USER_PASSWORD");
+            System.out.println(userCd + "\t" + userId + "\t" + userPassword );
+        }
+
+        connection.close();
+    }
+
+
 }
