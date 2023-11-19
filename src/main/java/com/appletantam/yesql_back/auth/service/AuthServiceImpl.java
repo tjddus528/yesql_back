@@ -2,7 +2,6 @@ package com.appletantam.yesql_back.auth.service;
 
 import com.appletantam.yesql_back.auth.dao.AuthDAO;
 import com.appletantam.yesql_back.auth.dto.UserDTO;
-import com.appletantam.yesql_back.manage.dto.UserDatabaseDTO;
 import org.apache.ibatis.exceptions.TooManyResultsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,45 +23,22 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public boolean checkDuplicatedId(String userId) {
         try {
-            if ( authDAO.checkDuplicatedId(userId) == null ) return true;      // 중복이 없을 때 true
-            return false;
+            if ( authDAO.checkDuplicatedId(userId) == null ) return true;       // 중복이 없을 때 true
+            return false;                                                       // 중복된 값일 때 false
         } catch (TooManyResultsException exception) {
-            return false;                                                      // 중복된 값일 때 false
+            return false;                                                       // 중복된 값일 때 false
         }
     }
 
     @Override
     public boolean login(UserDTO userDTO) {
         UserDTO dto = authDAO.selectLogin(userDTO);
-        if ( dto != null ) { // dto 변수 내에 값이 있는 경우, 해당 아이디와 비밀번호를 가진 회원을 데베에서 찾았음 = 로그인 성공
-            if (dto.getUserPassword().equals(userDTO.getUserPassword())) {
-                System.out.println("login success");
+        if ( dto != null ) { // dto 변수 내에 값이 있는 경우, 해당 아이디를 가진 회원을 데베에서 찾았음
+            if (dto.getUserPassword().equals(userDTO.getUserPassword())) { // 비밀번호가 같은 경우 로그인 성공
                 return true;
             }
         }
-
         return false;
-    }
-
-    @Override
-    public void createDB(String dbName, String userId) {
-        // userId를 가진 userCd를 들고와서 userCd 랑 dbName UserDatabase에 넣어주기
-
-        String userCd = authDAO.selectCd(userId); // 유저의 코드 들고오기
-
-        if ( userCd != null ){ // 잘 가져온 경우
-            // DTO 객체에 해당하지 않는 여러개 값을 mapper에 들고 가고 싶은 경우 hashMap을 이용해서 들고 간다
-            Map<String, String> map = new HashMap<String, String>();
-            map.put("userCd", userCd);
-            map.put("dbName", dbName);
-
-            authDAO.addUserDatabase(map); // 유저의 코드에 맞는 데이터베이스 생성해주기
-        }
-    }
-
-    @Override
-    public UserDatabaseDTO findDatabase(String userId) {
-        return authDAO.findDatabase(userId);
     }
 
 }
