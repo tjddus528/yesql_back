@@ -11,8 +11,6 @@ public enum BaseResponseStatus {
     SUCCESS(true, 1000, "요청에 성공하였습니다."),
     REGISTER_SUCCESS(true, 1001, "register success"),
     LOGIN_SUCCESS(true, 1002, "login success"),
-    FIND_DATABASE(true, 1004, "유저 데이터베이스가 존재합니다. main창으로 이동해주세요."),
-    CHANGED_DATABASE(true, 1005, "유저 데이터베이스의 이름을 성공적으로 변경했습니다"),
 
     /**
      * 1. 입력값에 오류가 있을 때 (2000~)
@@ -23,6 +21,7 @@ public enum BaseResponseStatus {
     NO_DATABASE(true, 2002, "유저의 데이터베이스가 존재하지 않습니다. welcome으로 이동해 데이터베이스를 생성해주세요."),
     REGISTER_FAILED(false,2003, "회원가입 실패! 중복된 아이디입니다."),
     ANTLR_API_ERROR(false, 2004, "ANTLR API 요청이 실패했습니다."),
+
     /**
      * 2. 이미 존재하는 리소스와 중복된 값일 때(2100~)
      * EXIST_목적어
@@ -57,8 +56,9 @@ public enum BaseResponseStatus {
      */
     DATABASE_ERROR(false, 4000, "데이터베이스 연결에 실패하였습니다."),
     SERVER_ERROR(false, 4001, "서버와의 연결에 실패하였습니다."),
-    EXECUTE_SQL_ERROR(false, 4002, "SQL 실행이 실패하였습니다.");
+    EXECUTE_SQL_ERROR(false, 4002, "SQL 실행이 실패하였습니다."),
 
+    FILE_ERROR(false,4003,"파일을 부르는 중 연결 실패했습니다");
 
 
     private final boolean isSuccess;
