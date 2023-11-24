@@ -94,38 +94,5 @@ public class AuthController {
 
     }
 
-    @GetMapping("/getData")
-    public void prac() throws SQLException {
-        String id = "appletantam";
-        String pw = "happycoding!!";
-        //Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/att?autoReconnect=true", id,pw);
-        Connection connection = DriverManager.getConnection("jdbc:mysql://yesql-test-db.cwcbrnwwwahx.ap-northeast-2.rds.amazonaws.com:3306", id,pw);
-        Statement stmt = connection.createStatement();
-
-        stmt.executeUpdate("USE yesql_test_db");
-        stmt.executeUpdate("CREATE DATABASE d1");
-        stmt.executeUpdate("CREATE TABLE user1_t1 (loan_number VARCHAR(10), branch_name VARCHAR(10), amount VARCHAR(10))");
-
-//        ResultSet rs = stmt.executeQuery("EXPLAIN USER");
-//        rs.next();
-//        String field = rs.getString("Field");
-//        String type = rs.getString("Type");
-//        String n = rs.getString("Null");
-//        String key = rs.getString("Key");
-//        System.out.println(field + "\t" + type + "\t" + n + "\t" + key);
-
-
-
-        ResultSet rs = stmt.executeQuery("SELECT * FROM USER WHERE USER_CD='1'");
-        while(rs.next()){
-            String userCd = rs.getString("USER_CD");
-            String userId = rs.getString("USER_ID");
-            String userPassword = rs.getString("USER_PASSWORD");
-            System.out.println(userCd + "\t" + userId + "\t" + userPassword );
-        }
-
-        connection.close();
-    }
-
 
 }
