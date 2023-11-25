@@ -4,6 +4,8 @@ import com.appletantam.yesql_back.manage.dao.ManageDAO;
 import com.appletantam.yesql_back.manage.dto.SchemaDTO;
 import com.appletantam.yesql_back.sqlManager.SqlConnector;
 import org.jetbrains.annotations.ApiStatus;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -91,6 +93,82 @@ public class ManageServiceImpl implements ManageService{
         }
 
         return schemaDTO;
+    }
+
+    @Override
+    public ArrayList<String> getColumns(JSONArray jsonArray) {
+
+        ArrayList<String> columns = new ArrayList<>();
+
+        JSONObject jsonObj = (JSONObject)jsonArray.get(0);
+        for (Object object : jsonObj.entrySet()) { // 한 줄 읽기
+            Map.Entry<String, String> entry = (Map.Entry<String, String>) object;
+            columns.add(entry.getKey());
+        }
+
+        return columns;
+    }
+
+    @Override
+    public String getColQuery(ArrayList<String> columns, String query) {
+
+        for ( int i = 0 ; i < columns.size() ; i++){
+            if ( i == (columns.size() - 1) ){ // 마지막 컬럼인 경우
+                query += "`" + columns.get(i) + "`) VALUES (";
+            }
+            else {
+                query += "`" + columns.get(i) + "`, ";
+            }
+        }
+
+        return query;
+    }
+
+    @Override
+    public void insertData(String query, JSONObject jsonObj, String dbName) throws Exception {
+
+        // 문장 만들기
+        int cnt = 0;
+        for ( Object object : jsonObj.entrySet()){
+            Map.Entry<String, String> entry = (Map.Entry<String, String>) object;
+
+            if ( cnt == ( jsonObj.size() - 1) ){ // 마지막 컬럼인 경우
+                query += "'" + entry.getValue() + "');";
+            }
+            else {
+                query += "'" + entry.getValue() + "', ";
+                cnt++;
+            }
+        }
+
+        // ec2_mysql 연결
+        mysqlConnectInService(dbName);
+
+        // 쿼리문(String query) 실행
+        try {
+            Statement stmt = sqlConnector.stmt;
+            stmt.executeUpdate(query);
+
+        } catch (Exception e) {
+            throw new Exception("중복된 값을 삽입했거나, 존재하지 않는 테이블입니다.");
+        }
+
+    }
+
+    @Override
+    public void truncateTable(String dbName, String tableName) throws Exception {
+        // ec2_mysql 연결
+        mysqlConnectInService(dbName);
+
+        // truncate table
+        try{
+            Statement stmt = sqlConnector.stmt;
+            String query = "TRUNCATE TABLE " + tableName + ";";
+            stmt.executeUpdate(query);
+        } catch ( Exception e ){
+            throw new Exception("오류발생");
+        }
+
     }
 
 
