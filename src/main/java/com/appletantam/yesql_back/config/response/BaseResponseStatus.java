@@ -57,8 +57,8 @@ public enum BaseResponseStatus {
     DATABASE_ERROR(false, 4000, "데이터베이스 연결에 실패하였습니다."),
     SERVER_ERROR(false, 4001, "서버와의 연결에 실패하였습니다."),
     EXECUTE_SQL_ERROR(false, 4002, "SQL 실행이 실패하였습니다."),
-
-    FILE_ERROR(false,4003,"파일을 부르는 중 연결 실패했습니다");
+    FILE_ERROR(false,4003,"파일을 부르는 중 연결 실패했습니다"),
+    IMPORT_FAIL(false, 4004, "중복된 값을 삽입했거나, 존재하지 않는 테이블입니다.");
 
 
     private final boolean isSuccess;

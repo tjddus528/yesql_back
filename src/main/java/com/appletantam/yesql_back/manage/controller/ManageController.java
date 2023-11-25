@@ -5,9 +5,11 @@ import com.appletantam.yesql_back.manage.dto.SchemaDTO;
 import com.appletantam.yesql_back.manage.service.ManageService;
 import com.appletantam.yesql_back.sqlManager.SqlConnector;
 
+import com.fasterxml.jackson.databind.ser.Serializers;
 import com.google.gson.JsonElement;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.data.jpa.repository.query.JSqlParserUtils;
 import org.springframework.http.HttpHeaders;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -148,74 +150,37 @@ public class ManageController {
         return new BaseResponse<>(SUCCESS, schemaDTOList);
     }
 
-    /*
     @PostMapping("/import")
-    public BaseResponse<?> dataImport(@RequestParam("dbName") String dbName, @RequestParam("tableName") String tableName, @RequestParam("file") MultipartFile file) throws IOException {
-        // 테이블 단위의 데이터를 받는다. 이때 형식은 <"attrName", "dataInfo"> 야할 것
-        // 필요한 입력값 >>
-        // 파일 업로드시 어느 테이블에 import 하고 싶은 건지! 테이블 이름
-        // 임포트를 할떄 기존에 있던 테이블을 truncate 할지 말지 여부
-
-        JSONParser parser = new JSONParser();
-
-        try{
-            FileReader reader = new FileReader(file);
-            Object obj = parser.parse(reader);
-            byte[] fileBytes = file.getBytes();
-            String fileContent = new String(fileBytes);
-
-        } catch ( IOException e ){
-            return new BaseResponse<>(FILE_ERROR);
-        }
-        return null;
-    }*/
-
-    @PostMapping("/import")
-    public ResponseEntity<?> importData(@RequestPart MultipartFile uploadFile, @RequestParam("dbName") String dbName, @RequestParam("tableName") String tableName){
+    public BaseResponse<?> importData(@RequestPart MultipartFile uploadFile, @RequestParam("dbName") String dbName, @RequestParam("tableName") String tableName)  throws Exception {
         JSONParser parser = new JSONParser();
 
         //파일이 존재하는 경우 읽기
         if ( !uploadFile.isEmpty() ){
             try{
                 InputStreamReader ir = new InputStreamReader(uploadFile.getInputStream());
-                //BufferedReader br = new BufferedReader(ir);
-
                 Object obj = parser.parse(ir);
                 JSONArray jsonArray = (JSONArray) obj;
+                ArrayList<String> columns; // 컬럼명 어레이리스트
 
-                String query = "INSERT INTO " + dbName + "." + tableName + "(";
-                boolean check = false;
+                // JSON 하나씩 INSERT해주기. JSON으로 파싱한 파일 읽기
+                if (!jsonArray.isEmpty()){ // 빈 파일이 아닌 경우, 테이블 데이터를 비우고 한 줄씩 뽑아준다
+                    String query = "INSERT INTO `" + dbName + "`.`" + tableName + "` (";
+                    manageService.truncateTable(dbName, tableName);
+                    columns = manageService.getColumns(jsonArray);
+                    query = manageService.getColQuery(columns,query);
 
-                if (!jsonArray.isEmpty()){ // 빈 파일이 아닌 경우 한 줄씩 뽑아준다
                     for (Object o : jsonArray) {
                         JSONObject jsonObj = (JSONObject) o; // 배열을 jsonObject로 자료형 변경
-                        for (Object object : jsonObj.entrySet()) {
-                            Map.Entry<String, String> entry = (Map.Entry<String, String>) object;
-                            if ( !check ){
-
-                                check = true;
-                            }
-                            System.out.println(entry.getKey() + " : " + entry.getValue());
-                        }
-
+                        manageService.insertData(query, jsonObj, dbName);
                     }
                 }
-//                String line;
-//                while( (line = br.readLine()) != null ){
-//                    System.out.println(line);
-//                }
 
-                //br.close();
-
-            } catch (IOException e){
-                e.printStackTrace();
-            } catch (ParseException pe) {
-                throw new RuntimeException(pe);
+            } catch (Exception e) {
+                return new BaseResponse<>(IMPORT_FAIL);
             }
-
         }
 
-        return null;
+        return new BaseResponse<>(SUCCESS);
     }
 
 
@@ -305,9 +270,9 @@ public class ManageController {
         in.close();
 
         // 5. 파일 삭제하기
-//        if ( file.exists() && !fileName.isEmpty()){
-//            file.delete();
-//        }
+        if ( file.exists() && !fileName.isEmpty()){
+            file.delete();
+        }
 
         //return exportFile;
     }
