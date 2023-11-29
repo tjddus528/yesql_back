@@ -14,6 +14,7 @@ public class StepComponent {
     int step;
     String keyword;
     String sqlStatement;
+    ArrayList<TableInfo> tables;
     ArrayList<SchemaDTO> tableData;
     ArrayList<ColumnInfo> selectedColumns;
     ArrayList<ColumnInfo> conditionColumns;

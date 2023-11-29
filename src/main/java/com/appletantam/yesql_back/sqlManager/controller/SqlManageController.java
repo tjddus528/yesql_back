@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.persistence.Table;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -121,6 +122,7 @@ public class SqlManageController {
             int step  = (int) sqlInfoByStep.get("step");
             String keyword = (String) sqlInfoByStep.get("keyword");
             String sqlStatement  = (String) sqlInfoByStep.get("sqlStatement");
+            ArrayList<TableInfo> tables = (ArrayList<TableInfo>) sqlInfoByStep.get("tables");
             ArrayList<ColumnInfo> selectedColumns = (ArrayList<ColumnInfo>) sqlInfoByStep.get("selectedColumns");
             ArrayList<ColumnInfo> conditionColumns = (ArrayList<ColumnInfo>) sqlInfoByStep.get("conditionColumns");
             ArrayList<String> conditions = (ArrayList<String>) sqlInfoByStep.get("conditions");
@@ -133,19 +135,209 @@ public class SqlManageController {
             stepComponent.setStep(step);
             stepComponent.setKeyword(keyword);
             stepComponent.setSqlStatement(sqlStatement);
-            stepComponent.setSelectedColumns(selectedColumns);
-            stepComponent.setConditionColumns(conditionColumns);
+            stepComponent.setTables(tables);
             stepComponent.setConditions(conditions);
             stepComponent.setJoinExists(joinExists);
-            stepComponent.setJoinedColumns(joinedColumns);
             stepComponent.setOn(on);
             stepComponent.setQueryA(queryA);
             stepComponent.setQueryB(queryB);
 
+            stepComponent.setSelectedColumns(selectedColumns);
+            // 테이블명, Alias 정리하기
+            if(selectedColumns != null){
+
+                ArrayList columns = (ArrayList) sqlInfoByStep.get("selectedColumns");
+                ArrayList<ColumnInfo> newSelectedColumns = new ArrayList<>();
 
 
+                for(int j=0; j<columns.size(); j++) {
+                    boolean tableNameIsAlias = false;
+
+                    LinkedHashMap columnsInfo = (LinkedHashMap) columns.get(j);
+                    ColumnInfo columnInfo = new ColumnInfo();
+
+                    // 컬럼의 테이블 이름과 alias 받아오기
+                    String tableNameOfColumn = (String) columnsInfo.get("tableName");
+                    String columnLabel = (String) columnsInfo.get("columnLabel");
+                    String aliasOfColumn = (String) columnsInfo.get("alias");
+
+                    if(tableNameOfColumn == null) {
+                        columnInfo.setTableName(tableNameOfColumn);
+                        columnInfo.setColumnLabel(columnLabel);
+                        columnInfo.setAlias(aliasOfColumn);
+                        newSelectedColumns.add(columnInfo);
+                        continue;
+                    }
+
+                    String tableName = null;
+                    String alias = null;
+                            // 테이블 이름이 alias인 경우찾기
+                    ArrayList tableInfo = (ArrayList) sqlInfoByStep.get("tables");
+                    for(int k=0; k<tableInfo.size(); k++) {
+                        LinkedHashMap tableNameInfo = (LinkedHashMap) tableInfo.get(k);
+
+                        // 테이블 이름과 alias 받아오기
+                        tableName = (String) tableNameInfo.get("tableName");
+                        alias = (String) tableNameInfo.get("alias");
+
+
+                        if(alias == null) alias = "";
+
+                        if (tableNameOfColumn.equals(alias)) {
+                            tableNameIsAlias = true;
+                            break;
+                        }
+                        tableNameIsAlias = false;
+
+                    }
+
+                    if(tableNameIsAlias) {
+                        columnInfo.setTableName(tableName);
+                        columnInfo.setColumnLabel(columnLabel);
+                        columnInfo.setAlias(alias);
+                    }
+                    else {
+                        columnInfo.setTableName(tableNameOfColumn);
+                        columnInfo.setColumnLabel(columnLabel);
+                        columnInfo.setAlias(aliasOfColumn);
+                    }
+                    newSelectedColumns.add(columnInfo);
+
+
+                }
+                stepComponent.setSelectedColumns(newSelectedColumns);
+            }
+
+
+            stepComponent.setConditionColumns(conditionColumns);
+            if(conditionColumns != null){
+
+                ArrayList columns = (ArrayList) sqlInfoByStep.get("conditionColumns");
+                ArrayList<ColumnInfo> newConditionColumns = new ArrayList<>();
+
+
+                for(int j=0; j<columns.size(); j++) {
+                    boolean tableNameIsAlias = false;
+
+                    LinkedHashMap columnsInfo = (LinkedHashMap) columns.get(j);
+                    ColumnInfo columnInfo = new ColumnInfo();
+
+                    // 컬럼의 테이블 이름과 alias 받아오기
+                    String tableNameOfColumn = (String) columnsInfo.get("tableName");
+                    String columnLabel = (String) columnsInfo.get("columnLabel");
+                    String aliasOfColumn = (String) columnsInfo.get("alias");
+                    if(tableNameOfColumn == null) {
+                        columnInfo.setTableName(tableNameOfColumn);
+                        columnInfo.setColumnLabel(columnLabel);
+                        columnInfo.setAlias(aliasOfColumn);
+                        newConditionColumns.add(columnInfo);
+                        continue;
+                    }
+
+                    String tableName = null;
+                    String alias = null;
+                    // 테이블 이름이 alias인 경우찾기
+                    ArrayList tableInfo = (ArrayList) sqlInfoByStep.get("tables");
+                    for(int k=0; k<tableInfo.size(); k++) {
+                        LinkedHashMap tableNameInfo = (LinkedHashMap) tableInfo.get(k);
+
+                        // 테이블 이름과 alias 받아오기
+                        tableName = (String) tableNameInfo.get("tableName");
+                        alias = (String) tableNameInfo.get("alias");
+
+                        if(alias == null) alias = "";
+
+                        if (tableNameOfColumn.equals(alias)) {
+                            tableNameIsAlias = true;
+                            break;
+                        }
+                        tableNameIsAlias = false;
+                    }
+
+                    if(tableNameIsAlias) {
+                        columnInfo.setTableName(tableName);
+                        columnInfo.setColumnLabel(columnLabel);
+                        columnInfo.setAlias(alias);
+                    }
+                    else {
+                        columnInfo.setTableName(tableNameOfColumn);
+                        columnInfo.setColumnLabel(columnLabel);
+                        columnInfo.setAlias(aliasOfColumn);
+                    }
+                    newConditionColumns.add(columnInfo);
+
+
+                }
+                stepComponent.setConditionColumns(newConditionColumns);
+            }
+
+            stepComponent.setJoinedColumns(joinedColumns);
+            if(joinedColumns != null){
+
+                ArrayList columns = (ArrayList) sqlInfoByStep.get("joinedColumns");
+                ArrayList<ColumnInfo> newJoinedColumns = new ArrayList<>();
+
+
+                for(int j=0; j<columns.size(); j++) {
+                    boolean tableNameIsAlias = false;
+
+                    LinkedHashMap columnsInfo = (LinkedHashMap) columns.get(j);
+                    ColumnInfo columnInfo = new ColumnInfo();
+
+                    // 컬럼의 테이블 이름과 alias 받아오기
+                    String tableNameOfColumn = (String) columnsInfo.get("tableName");
+                    String columnLabel = (String) columnsInfo.get("columnLabel");
+                    String aliasOfColumn = (String) columnsInfo.get("alias");
+
+                    if(tableNameOfColumn == null) {
+                        columnInfo.setTableName(tableNameOfColumn);
+                        columnInfo.setColumnLabel(columnLabel);
+                        columnInfo.setAlias(aliasOfColumn);
+                        newJoinedColumns.add(columnInfo);
+                        continue;
+                    }
+
+                    String tableName = null;
+                    String alias = null;
+                    // 테이블 이름이 alias인 경우찾기
+                    ArrayList tableInfo = (ArrayList) sqlInfoByStep.get("tables");
+                    for(int k=0; k<tableInfo.size(); k++) {
+                        LinkedHashMap tableNameInfo = (LinkedHashMap) tableInfo.get(k);
+
+                        // 테이블 이름과 alias 받아오기
+                        tableName = (String) tableNameInfo.get("tableName");
+                        alias = (String) tableNameInfo.get("alias");
+
+                        if(alias == null) alias = "";
+
+                        if (tableNameOfColumn.equals(alias)) {
+                            tableNameIsAlias = true;
+                            break;
+                        }
+                        tableNameIsAlias = false;
+
+                    }
+
+                    if(tableNameIsAlias) {
+                        columnInfo.setTableName(tableName);
+                        columnInfo.setColumnLabel(columnLabel);
+                        columnInfo.setAlias(alias);
+                    }
+                    else {
+                        columnInfo.setTableName(tableNameOfColumn);
+                        columnInfo.setColumnLabel(columnLabel);
+                        columnInfo.setAlias(aliasOfColumn);
+                    }
+                    newJoinedColumns.add(columnInfo);
+
+
+                }
+                stepComponent.setJoinedColumns(newJoinedColumns);
+            }
+
+
+            // 테이블 데이터 가져오기
             ArrayList<SchemaDTO> tableDataList = new ArrayList<>();
-
             // SELECT일 경우 테이블명에 따른 SQL결과데이터 리스트에 저장
             if(keyword.equals("SELECT")) {
                 ArrayList tableInfo = (ArrayList) sqlInfoByStep.get("tables");
@@ -182,6 +374,8 @@ public class SqlManageController {
 //                System.out.println(A);
 //                System.out.println(B);
             }
+
+
             // 스키마리스트를 해당 과정 정보에 저장(step별로)
             stepComponent.setTableData(tableDataList);
             stepComponentsList.add(stepComponent);
