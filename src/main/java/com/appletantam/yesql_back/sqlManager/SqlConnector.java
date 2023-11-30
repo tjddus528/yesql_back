@@ -15,30 +15,17 @@ public class SqlConnector {
 
 
 
-    public SqlConnector(String mysqlUrl, String user, String password) {
-
-        try {
-            connection = DriverManager.getConnection(mysqlUrl, user, password);
-            stmt = connection.createStatement();
-
-        } catch (SQLException ex) {
-            // handle any errors
-            System.out.println("SQLException: " + ex.getMessage());
-            System.out.println("SQLState: " + ex.getSQLState());
-            System.out.println("VendorError: " + ex.getErrorCode());
-        }
-
+    public SqlConnector(String mysqlUrl, String user, String password) throws SQLException{
+        connection = DriverManager.getConnection(mysqlUrl, user, password);
+        stmt = connection.createStatement();
     }
 
-    public void useDB(String dbName) {
-        try {
-            stmt.executeUpdate("USE "+dbName+";");
-        } catch (SQLException ex) {
-            // handle any errors
-            System.out.println("SQLException: " + ex.getMessage());
-            System.out.println("SQLState: " + ex.getSQLState());
-            System.out.println("VendorError: " + ex.getErrorCode());
-        }
+    public void createDB(String dbName) throws SQLException {
+        stmt.executeUpdate("CREATE DATABASE "+dbName);
+    }
+
+    public void useDB(String dbName) throws SQLException{
+        stmt.executeUpdate("USE "+dbName+";");
     }
 
     public boolean executeSql(String sql) throws SQLException {
@@ -50,13 +37,7 @@ public class SqlConnector {
         return haveReturn;
     }
 
-    public void closeConnection() {
-        try { connection.close(); }
-        catch (SQLException ex) {
-            // handle any errors
-            System.out.println("SQLException: " + ex.getMessage());
-            System.out.println("SQLState: " + ex.getSQLState());
-            System.out.println("VendorError: " + ex.getErrorCode());
-        }
+    public void closeConnection() throws SQLException{
+        connection.close();
     }
 }

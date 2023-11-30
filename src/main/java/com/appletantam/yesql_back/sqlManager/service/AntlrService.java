@@ -15,7 +15,7 @@ import java.util.HashMap;
 @Service
 public class AntlrService {
 
-    public ArrayList getData(String url) {
+    public ArrayList getData(String url) throws Exception {
 
         //Spring restTemplate
         HashMap<String, Object> result = new HashMap<String, Object>();
@@ -38,7 +38,6 @@ public class AntlrService {
         resultBody = (ArrayList) resultMap.getBody();
 
         return resultBody;
-
 
     }
 }
