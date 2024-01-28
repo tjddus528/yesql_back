@@ -4,7 +4,9 @@ import com.appletantam.yesql_back.config.response.BaseResponse;
 import com.appletantam.yesql_back.config.response.BaseResponseStatus;
 import com.appletantam.yesql_back.auth.dto.UserDTO;
 import com.appletantam.yesql_back.auth.service.AuthService;
+import com.appletantam.yesql_back.sqlManager.SqlConnector;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,7 +21,13 @@ public class AuthController {
 
     @Autowired
     private AuthService authService;
-
+    SqlConnector sqlConnector;
+    @Value("${mysql.url}")
+    public String mysqlUrl;
+    @Value("${mysql.user}")
+    public String user;
+    @Value("${mysql.password}")
+    public String password;
     @GetMapping("/test")
     public String signUp() {
         return "test success";
@@ -52,8 +60,17 @@ public class AuthController {
         if (checkDuplicatedId(userDTO.getUserId())){ // 중복 확인 끝난 경우
             // userId랑 dbName에 userId 값 넣어주기, userPassword에 비밀번호 넣어주기
             UserDTO newUser = authService.addUser(userDTO);
+            String dbName = newUser.getUserId();
+
+            // 1) 해당 유저의 DB 정보로 SqlConnector 생성 (USE dbName;)
+            try {
+                sqlConnector = new SqlConnector(mysqlUrl, user, password);
+                sqlConnector.createDB(dbName);
+            } catch (SQLException exception) {
+                return new BaseResponse(false, exception.getMessage(), 3000,dbName);
+            }
+
             return new BaseResponse<>(BaseResponseStatus.REGISTER_SUCCESS, newUser);
-            // 반환되는 값 : userId
         }
         else {
             return new BaseResponse<>(BaseResponseStatus.REGISTER_FAILED);
