@@ -1,14 +1,13 @@
 package com.appletantam.yesql_back.auth.service;
 
-import com.appletantam.config.response.BaseException;
-import com.appletantam.config.response.BaseResponse;
 import com.appletantam.yesql_back.auth.dao.AuthDAO;
 import com.appletantam.yesql_back.auth.dto.UserDTO;
+import org.apache.ibatis.exceptions.TooManyResultsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import static com.appletantam.config.response.BaseResponseStatus.DATABASE_ERROR;
-import static com.appletantam.config.response.BaseResponseStatus.EXISTS_ID;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -17,20 +16,30 @@ public class AuthServiceImpl implements AuthService {
     private AuthDAO authDAO;
 
     @Override
-    public UserDTO addUser(UserDTO userDTO) throws BaseException {
-
-        // 중복 여부 검사
-        if(checkDuplicatedId(userDTO.getUserId()).equals("duplicate")){
-            throw new BaseException(EXISTS_ID);
-        }
-
+    public UserDTO addUser(UserDTO userDTO){
         return authDAO.adduser(userDTO);
-
     }
 
     @Override
-    public String checkDuplicatedId(String userId) {
-        if ( authDAO.checkDuplicatedId(userId) == null ) return "notDuplicate";
-        else return "duplicate";
+    public boolean checkDuplicatedId(String userId) {
+        try {
+            if ( authDAO.checkDuplicatedId(userId) == null ) return true;       // 중복이 없을 때 true
+            return false;                                                       // 중복된 값일 때 false
+        } catch (TooManyResultsException exception) {
+            return false;                                                       // 중복된 값일 때 false
+        }
     }
+
+    @Override
+    public boolean login(UserDTO userDTO) {
+        UserDTO dto = authDAO.selectLogin(userDTO);
+        if ( dto != null ) { // dto 변수 내에 값이 있는 경우, 해당 아이디를 가진 회원을 데베에서 찾았음
+            if (dto.getUserPassword().equals(userDTO.getUserPassword())) { // 비밀번호가 같은 경우 로그인 성공
+                return true;
+            }
+        }
+        return false;
+    }
+
+
 }

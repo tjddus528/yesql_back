@@ -1,4 +1,4 @@
-package com.appletantam.config.response;
+package com.appletantam.yesql_back.config.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
