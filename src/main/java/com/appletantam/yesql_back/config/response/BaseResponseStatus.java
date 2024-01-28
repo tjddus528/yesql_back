@@ -60,14 +60,15 @@ public enum BaseResponseStatus {
     FILE_ERROR(false,4003,"파일을 부르는 중 연결 실패했습니다"),
     IMPORT_FAIL(false, 4004, "중복된 값을 삽입했거나, 존재하지 않는 테이블입니다."),
 
-    TABLE_ERROR(false,4005,"테이블 결과를 받아오는데 실패했습니다.");
+    TABLE_ERROR(false,4005,"테이블 결과를 받아오는데 실패했습니다."),
+    SUBQUERY_ERROR(false,4005,"서브쿼리의 결과를 받아오는데 실패했습니다.");
 
 
     private final boolean isSuccess;
     private final int code;
     private final String message;
 
-    private BaseResponseStatus(boolean isSuccess, int code, String message){
+    BaseResponseStatus(boolean isSuccess, int code, String message){
         this.isSuccess = isSuccess;
         this.code = code;
         this.message = message;
