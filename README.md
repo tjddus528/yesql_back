@@ -1,6 +1,7 @@
 # DBMS기반 SQL분석 및 단계별 시각화 시스템, YESQL
-MySQL Backend Repository
-----
+
+- [Backend Repository](https://github.com/tjddus528/yesql_back)
+- [MySQL ANTLR Repository](https://github.com/tjddus528/ANTLR_API)
 
 ## 🔍 Overview
 - 프로젝트 주제 : SQL문을 입력하면 데이터 처리 과정을 단계별로 시각화해주는 플랫폼
